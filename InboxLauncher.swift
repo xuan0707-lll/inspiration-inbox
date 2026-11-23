@@ -4,7 +4,10 @@ import Darwin
 
 let home = FileManager.default.homeDirectoryForCurrentUser
 let root = Bundle.main.bundleURL.deletingLastPathComponent()
-let vault = home.appendingPathComponent("Library/Mobile Documents/iCloud~md~obsidian/Documents/灵感与素材", isDirectory: true)
+let defaultVault = home.appendingPathComponent("Library/Mobile Documents/iCloud~md~obsidian/Documents/灵感与素材", isDirectory: true)
+let vault = ProcessInfo.processInfo.environment["CAPTURE_VAULT"].map {
+    URL(fileURLWithPath: $0, isDirectory: true)
+} ?? defaultVault
 let bookmark = root.appendingPathComponent("vault.bookmark")
 func readGrant() throws -> URL {
     var stale = false
