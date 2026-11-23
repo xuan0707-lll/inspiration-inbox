@@ -2,7 +2,7 @@
 
 [简体中文](README.md) · [English](README.en.md) · [Deutsch](README.de.md)
 
-[Erste Version herunterladen](https://github.com/xuan0707-lll/inspiration-inbox/archive/refs/tags/v0.1.0-alpha.1.zip) · [Kurzbefehl fürs iPhone laden](https://github.com/xuan0707-lll/inspiration-inbox/raw/refs/heads/main/mobile/存到灵感库.shortcut) · [Einrichtung](#einrichtung)
+[Vorabversion herunterladen](https://github.com/xuan0707-lll/inspiration-inbox/archive/refs/tags/v0.1.0-alpha.2.zip) · [Kurzbefehl fürs iPhone laden](https://github.com/xuan0707-lll/inspiration-inbox/raw/refs/heads/main/mobile/存到灵感库.shortcut) · [Einrichtung](#einrichtung)
 
 Das Inspirationsarchiv macht aus Videos und Bildbeiträgen, die du auf dem Smartphone entdeckst, durchsuchbare Obsidian-Notizen. So kannst du sie später beim Schreiben, bei der Arbeit oder in kreativen Projekten mit KI weiterverwenden.
 
@@ -40,7 +40,7 @@ Das Sammeln unterwegs soll auch mit künftigen Versionen unkompliziert bleiben. 
 
 ## Einrichtung
 
-v0.1.0-alpha.1 ist die erste öffentliche Vorabversion. Das Downloadpaket verwendet derzeit chinesische Datei- und Oberflächennamen. Im Text stehen die deutschen Entsprechungen. Der folgende Tresorname muss für diese Version genau übernommen werden.
+Version v0.1.0-alpha.2 behebt den Start des Posteingangs bei der Mac-Anmeldung und prüft den Ordnerzugriff. Das Downloadpaket verwendet derzeit chinesische Datei- und Oberflächennamen. Im Text stehen die deutschen Entsprechungen. Der folgende Tresorname muss für diese Version genau übernommen werden.
 
 1. Installiere Obsidian auf beiden Geräten und aktiviere iCloud Drive mit demselben Apple Account. Erstelle oder öffne auf dem iPhone den Tresor `灵感与素材` („Inspiration und Material“) mit aktivierter Speicherung in iCloud. Sobald der Ordner im Finder unter iCloud Drive → Obsidian erscheint, öffne ihn auf dem Mac als Tresor.
 2. Lade die ZIP-Datei auf den Mac, entpacke sie und öffne `一键配置.command` (Einrichtung per Doppelklick). Beim ersten Start werden mehrere GB an Werkzeugen und Modellen heruntergeladen. Falls macOS die Apple Command Line Tools anfordert, installiere sie und starte die Einrichtung erneut. Bestätige anschließend den Import des Kurzbefehls.

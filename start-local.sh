@@ -53,6 +53,7 @@ if [ -z "${LOCAL_VISION_MODEL+x}" ] && [ "$(uname -s):$(uname -m)" = Darwin:arm6
 fi
 if [ "$(uname -s)" = Darwin ] && [ "${CAPTURE_DISABLE_ICLOUD_INBOX:-0}" != 1 ]; then
     CAPTURE_ICLOUD_INBOX="${CAPTURE_ICLOUD_INBOX:-$CAPTURE_VAULT/手机分享收件箱}"
+    [ -d "$CAPTURE_VAULT" ] || { echo "等待 iCloud 笔记库就绪" >&2; exit 1; }
     mkdir -p "$CAPTURE_ICLOUD_INBOX"
     export CAPTURE_ICLOUD_INBOX
 fi

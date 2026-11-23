@@ -2,7 +2,7 @@
 
 [简体中文](README.md) · [English](README.en.md) · [Deutsch](README.de.md)
 
-[下载首版 ZIP](https://github.com/xuan0707-lll/inspiration-inbox/archive/refs/tags/v0.1.0-alpha.1.zip) · [单独下载 iPhone 快捷指令](https://github.com/xuan0707-lll/inspiration-inbox/raw/refs/heads/main/mobile/存到灵感库.shortcut) · [安装说明](#第一次使用)
+[下载试用版 ZIP](https://github.com/xuan0707-lll/inspiration-inbox/archive/refs/tags/v0.1.0-alpha.2.zip) · [单独下载 iPhone 快捷指令](https://github.com/xuan0707-lll/inspiration-inbox/raw/refs/heads/main/mobile/存到灵感库.shortcut) · [安装说明](#第一次使用)
 
 把手机上刷到的视频和图文整理成 Obsidian 笔记，供 AI 辅助写作、办公和创作时使用。
 
@@ -80,6 +80,6 @@ rm -f "$HOME/Library/LaunchAgents/local.inspiration-inbox.plist"
 
 ## 版本与授权
 
-v0.1.0-alpha.1 是第一个公开试用版本。已有设备上验证过 B 站从控制中心保存到归档、抖音转写、小红书图文识字，以及特别关注用真实作品模拟首次发现后的入库。新设备的首次安装和跨设备同步仍需要更多机型验证。欢迎在 Issues 中提供平台、复现步骤及已脱敏的报错。
+v0.1.0-alpha.2 修复了 Mac 登录后的收件箱自启和权限检查。 v0.1.0-alpha.1 是第一个公开试用版本。已有设备上验证过 B 站从控制中心保存到归档、抖音转写、小红书图文识字，以及特别关注用真实作品模拟首次发现后的入库。新设备的首次安装和跨设备同步仍需要更多机型验证。欢迎在 Issues 中提供平台、复现步骤及已脱敏的报错。
 
 项目源码使用 [MIT License](LICENSE)。第三方工具和模型由配置程序从各自来源下载，遵循其各自许可。

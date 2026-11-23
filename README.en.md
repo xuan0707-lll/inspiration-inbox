@@ -2,7 +2,7 @@
 
 [简体中文](README.md) · [English](README.en.md) · [Deutsch](README.de.md)
 
-[Download the first release](https://github.com/xuan0707-lll/inspiration-inbox/archive/refs/tags/v0.1.0-alpha.1.zip) · [Download the iPhone shortcut](https://github.com/xuan0707-lll/inspiration-inbox/raw/refs/heads/main/mobile/存到灵感库.shortcut) · [Setup](#setup)
+[Download the preview](https://github.com/xuan0707-lll/inspiration-inbox/archive/refs/tags/v0.1.0-alpha.2.zip) · [Download the iPhone shortcut](https://github.com/xuan0707-lll/inspiration-inbox/raw/refs/heads/main/mobile/存到灵感库.shortcut) · [Setup](#setup)
 
 Turn videos and image posts you come across on your phone into Obsidian notes you can use with AI for writing, research and creative work.
 
@@ -40,7 +40,7 @@ Keeping capture convenient on a phone will remain a priority. Use GitHub Issues 
 
 ## Setup
 
-This is the first public preview, v0.1.0-alpha.1. The downloadable package currently uses Chinese filenames and interface labels. The names above are their English equivalents. Use the vault name below exactly as shown for this version.
+Version v0.1.0-alpha.2 fixes inbox startup at Mac login and verifies folder access. The downloadable package currently uses Chinese filenames and interface labels. The names above are their English equivalents. Use the vault name below exactly as shown for this version.
 
 1. Install Obsidian on both devices and enable iCloud Drive under the same Apple Account. On iPhone, create or open the vault named `灵感与素材` (“Inspiration and Materials”) with Store in iCloud enabled. When it appears in Finder under iCloud Drive → Obsidian, open that folder as a vault on the Mac.
 2. Download and extract the ZIP on your Mac. Double-click `一键配置.command` (one-click setup). The first run needs internet access to download several GB of tools and models. If prompted, install Apple’s Command Line Tools and rerun setup. Confirm “Add Shortcut” when the import window appears.

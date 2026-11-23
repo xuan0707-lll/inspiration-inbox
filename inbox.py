@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import select
+import sys
 import tempfile
 import time
 from urllib.parse import urlsplit
@@ -229,9 +230,11 @@ def watch_changes(directory, jobs):
             jobs.on_finished = notify_finished
             retries = 0
             while True:
+                os.listdir(directory)
                 watch_files(directory, queue, watched)
                 incomplete = scan(directory, jobs)
-                timeout = None
+                # iCloud can replace files without delivering a local vnode notification.
+                timeout = 60
                 if directory not in watched:
                     timeout = 2
                 elif incomplete and retries < 6:
@@ -257,9 +260,23 @@ def watch_changes(directory, jobs):
 
 
 def watch_inbox(directory: Path, jobs):
-    if hasattr(select, 'kqueue'):
-        watch_changes(directory, jobs)
-        return
+    last_error = None
     while True:
-        scan(directory, jobs)
-        time.sleep(20)
+        try:
+            # pathlib.glob may silently hide permission errors on macOS.
+            os.listdir(directory)
+            ready_file = os.environ.get('CAPTURE_INBOX_READY_FILE')
+            if ready_file:
+                Path(ready_file).write_text(str(os.getpid()))
+            print(f'收件箱就绪：{directory}', file=sys.stderr, flush=True)
+            if hasattr(select, 'kqueue'):
+                watch_changes(directory, jobs)
+            else:
+                while True:
+                    scan(directory, jobs)
+                    time.sleep(20)
+        except OSError as error:
+            if str(error) != last_error:
+                print(f'收件箱暂不可用，将重试：{error}', file=sys.stderr, flush=True)
+                last_error = str(error)
+            time.sleep(20)

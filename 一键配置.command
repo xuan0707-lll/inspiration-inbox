@@ -15,7 +15,7 @@ if ! xcode-select -p >/dev/null 2>&1; then
     echo '请在系统弹窗完成 Apple 命令行工具安装，然后再次双击本文件。图文识字需要其中的 Swift。'
     exit 1
 fi
-if [ ! -d "$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents" ]; then
+if [ ! -d "$vault" ]; then
     echo '请先在 iPhone 的 Obsidian 创建「灵感与素材」库，开启 Store in iCloud，再等 Mac 的 iCloud 云盘出现 Obsidian 文件夹。'
     exit 1
 fi
@@ -50,11 +50,26 @@ prepare_model mlx-vlm mlx-community/Qwen3-VL-2B-Instruct-4bit
 for item in capture.py server.py watch.py inbox.py jobs.py describe_frames.py read_frames.swift summarize.py transcribe_mlx.py start-local.sh; do
     cp "$src/$item" "$app/$item"
 done
+bundle="$app/灵感入库后台.app"
+build="$work/灵感入库后台.app"
+mkdir -p "$build/Contents/MacOS"
+swiftc "$src/InboxLauncher.swift" -o "$build/Contents/MacOS/InboxLauncher"
+"$py" - "$build/Contents/Info.plist" <<'PLIST'
+import plistlib, sys
+from pathlib import Path
+Path(sys.argv[1]).write_bytes(plistlib.dumps(dict(
+    CFBundleIdentifier='local.inspiration-inbox.launcher', CFBundleName='灵感入库后台',
+    CFBundleExecutable='InboxLauncher', CFBundlePackageType='APPL', CFBundleVersion='1',
+    LSUIElement=True)))
+PLIST
+codesign --force --sign - "$build"
+ditto "$build" "$bundle"
+codesign --verify "$bundle"
 if [ ! -e "$state/creators.json" ]; then echo '[]' > "$state/creators.json"; fi
 "$py" - "$app" "$state" "$agent" "$label" <<'PY'
 import pathlib,plistlib,sys
 app,state,agent,label=sys.argv[1:]
-cfg=dict(Label=label,ProgramArguments=['/bin/sh',app+'/start-local.sh'],RunAtLoad=True,KeepAlive=True,ThrottleInterval=20,EnvironmentVariables=dict(CAPTURE_LOCAL_STATE_DIR=state),StandardOutPath=state+'/service.log',StandardErrorPath=state+'/errors.log')
+cfg=dict(Label=label,AssociatedBundleIdentifiers=['local.inspiration-inbox.launcher'],ProgramArguments=[app+'/灵感入库后台.app/Contents/MacOS/InboxLauncher'],RunAtLoad=True,KeepAlive=True,ThrottleInterval=20,EnvironmentVariables=dict(CAPTURE_LOCAL_STATE_DIR=state,CAPTURE_INBOX_READY_FILE=state+'/inbox-ready'),StandardOutPath=state+'/service.log',StandardErrorPath=state+'/errors.log')
 p=pathlib.Path(agent)
 tmp=p.with_suffix('.new')
 tmp.write_bytes(plistlib.dumps(cfg))
@@ -62,14 +77,20 @@ tmp.replace(p)
 PY
 if launchctl print "$domain/$label" >/dev/null 2>&1; then launchctl bootout "$domain/$label"; fi
 launchctl bootstrap "$domain" "$agent"
-for attempt in {1..15}; do
-    if launchctl print "$domain/$label" | grep -q 'state = running' && /usr/sbin/lsof -nP -iTCP:18787 -sTCP:LISTEN >/dev/null; then
-        echo 'Mac 后台已启动，下次登录也会自动启动。正在打开快捷指令，请点「添加快捷指令」。'
-        open "$src/mobile/存到灵感库.shortcut"
-        echo '请按 README 的 iPhone 首次配置添加控制中心按钮。'
-        exit 0
-    fi
-    sleep 1
-done
-echo "后台未就绪，查看 $state/errors.log"
-exit 1
+wait_for_inbox() {
+    for attempt in {1..20}; do
+        worker=$(cat "$state/inbox-ready" 2>/dev/null || true)
+        if [[ "$worker" =~ ^[0-9]+$ ]] && /usr/sbin/lsof -a -p "$worker" -iTCP:18787 -sTCP:LISTEN >/dev/null 2>&1; then return 0; fi
+        sleep 1
+    done
+    return 1
+}
+if ! wait_for_inbox; then
+    echo '后台尚未读到收件箱。请在弹窗里选择 iCloud 中的「灵感与素材」文件夹。'
+    open -n -W "$bundle" --args --authorize
+    launchctl kickstart -k "$domain/$label"
+    wait_for_inbox || { echo "后台未就绪，查看 $state/errors.log"; exit 1; }
+fi
+echo '后台已读取手机分享收件箱，下次登录会自动启动。正在打开快捷指令。'
+open "$src/mobile/存到灵感库.shortcut"
+echo '请按 README 的 iPhone 首次配置添加控制中心按钮。'
